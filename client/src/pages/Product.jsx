@@ -43,8 +43,8 @@ const Product = () => {
 
         <div className="flex flex-col md:flex-row gap-16 mt-4">
           {/* Thumbnails + Main Image */}
-          <div className="flex gap-3">
-            <div className="flex flex-col gap-3">
+          <div className="flex gap-3 md:flex-row flex-col-reverse">
+            <div className="flex md:flex-col gap-3">
               {data.imageUrl?.map((image, index) => (
                 <div
                   key={index}

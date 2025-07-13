@@ -193,17 +193,22 @@ const Navbar = () => {
               />
               {showMenu && (
                 <div className="absolute right-0 mt-2 w-32 bg-white border rounded shadow z-50">
+                  <Link to="/orders">
+                    <button className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
+                      Orders
+                    </button>
+                  </Link>
+                  <Link to="/profile">
+                    <button className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
+                      Profile
+                    </button>
+                  </Link>
                   <button
                     onClick={handleLogout}
                     className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
                   >
                     Logout
                   </button>
-                  <Link to="/profile">
-                    <button className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
-                      Profile
-                    </button>
-                  </Link>
                 </div>
               )}
             </div>

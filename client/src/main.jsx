@@ -20,8 +20,14 @@ import AllCategory from "./components/Admin/AllCategory.jsx";
 import AllProduct from "./components/Admin/AllProduct.jsx";
 
 import ProductsByCategory from "./pages/Categories.jsx";
-import Order from "./pages/Order.jsx";
+
 import Profile from "./pages/Profile.jsx";
+import Checkout from "./pages/Checkout.jsx";
+import Order from "./pages/Order.jsx";
+import OrderSuccess from "./pages/OrderSuccess.jsx";
+import About from "./pages/About.jsx";
+import ContactUs from "./pages/Contact.jsx";
+import Orders from "./components/Admin/Orders.jsx";
 const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
@@ -37,6 +43,14 @@ const router = createBrowserRouter([
         element: <Products />,
       },
       {
+        path: "/about",
+        element: <About />,
+      },
+      {
+        path: "/contact",
+        element: <ContactUs />,
+      },
+      {
         path: "/products/:id",
         element: <Product />,
       },
@@ -49,12 +63,20 @@ const router = createBrowserRouter([
         element: <Carts />,
       },
       {
-        path: "/orders",
-        element: <Order />,
+        path: "/Checkout",
+        element: <Checkout />,
       },
       {
         path: "/profile",
         element: <Profile />,
+      },
+      {
+        path: "/orders",
+        element: <Order />,
+      },
+      {
+        path: "/order-success",
+        element: <OrderSuccess />,
       },
 
       {
@@ -71,6 +93,7 @@ const router = createBrowserRouter([
               { path: "edit-product/:id", element: <AddProduct /> },
               { path: "all-categories", element: <AllCategory /> },
               { path: "all-products", element: <AllProduct /> },
+              { path: "all-orders", element: <Orders /> },
             ],
           },
         ],

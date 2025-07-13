@@ -10,6 +10,7 @@ import errorMiddleware from "./middleware/error.middleware.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import totalRouter from "./router/total.routes.js";
+import payment from "./router/payment.routes.js";
 
 const app = express();
 
@@ -30,6 +31,8 @@ app.use("/api/v1/categories", categoriesRouter);
 app.use("/api/v1/products", productRouter);
 app.use("/api/v1/orders", orderRouter);
 app.use("/api/v1/total", totalRouter);
+app.use("/api/v1/payment", payment);
+
 app.use(errorMiddleware);
 
 app.get("/", (req, res) => {

@@ -15,7 +15,7 @@ const Admin = () => {
     },
     { name: "Product", path: "/admin/all-products", icon: <FaEye /> },
     { name: "Users", path: "/admin/all-users", icon: <FaUsers /> },
-    { name: "Order", path: "/admin/all-users", icon: <FaClipboardList /> },
+    { name: "Order", path: "/admin/all-orders", icon: <FaClipboardList /> },
   ];
 
   return (

@@ -1,107 +1,92 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React from "react";
+import Layout from "../Layout";
+import { useQuery } from "@tanstack/react-query";
+import { fetchOrders } from "../api/order";
 import { Link } from "react-router";
 
 const Order = () => {
-  const user = useSelector((state) => state.auth.user?.user);
-  const items = useSelector((state) => state.cart.items);
-
-  const totalPrice = items.reduce(
-    (acc, item) => acc + item.price * item.quantity,
-    0
-  );
-  const tax = totalPrice * 0.02;
-  const grandTotal = totalPrice + tax;
-
-  const handlePlaceOrder = () => {
-    const orderData = {
-      customerName: name,
-
-      items: items,
-      total: grandTotal.toFixed(2),
-    };
-
-    console.log("Order Placed:", orderData);
-    alert("Order placed successfully!");
+  const {
+    data: orders,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["orders"],
+    queryFn: fetchOrders,
+    retry: false,
+    refetchOnWindowFocus: false,
+  });
+  const statusColors = {
+    Paid: "bg-green-100 text-green-800",
+    Pending: "bg-yellow-100 text-yellow-800",
+    Shipped: "bg-blue-100 text-blue-800",
+    Cancelled: "bg-red-100 text-red-800",
   };
-
+  console.log(orders);
   return (
-    <div className="max-w-6xl mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-10">
-      {/* Left: Items and address */}
-      <div>
-        <h1 className="text-3xl font-bold mb-6">Review Your Order</h1>
+    <Layout>
+      <div className="max-w-6xl mx-auto px-4 py-10">
+        <h1 className="text-3xl font-bold text-gray-800 mb-6">My Orders</h1>
 
-        {/* Address Section */}
-        <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-3">Address</h2>
-          <p>{user?.address || "No address provided"}</p>
-          <Link to="/profile">
-            <button className="bg-blue-600 text-white px-4 py-2 rounded mt-2">
-              Change Address
-            </button>
-          </Link>
-        </div>
+        {isLoading && (
+          <p className="text-gray-600 dark:text-gray-300">
+            Loading your orders...
+          </p>
+        )}
+        {isError && (
+          <p className="text-red-600 dark:text-red-400 font-medium">
+            Error: {error.message}
+          </p>
+        )}
+        {!isLoading && orders?.length === 0 && (
+          <p className="text-gray-400 dark:text-gray-500">
+            You haven't placed any orders yet.
+          </p>
+        )}
 
-        {/* Ordered Items */}
-        <div>
-          <h2 className="text-xl font-semibold mb-3">Your Items</h2>
-          {items.length === 0 ? (
-            <p className="text-gray-500">No items in your cart.</p>
-          ) : (
-            <table className="w-full text-left text-sm border border-gray-200">
-              <thead className="bg-gray-100">
-                <tr>
-                  <th className="p-2 border">Product</th>
-                  <th className="p-2 border">Qty</th>
-                  <th className="p-2 border">Price</th>
+        {orders?.length > 0 && (
+          <div className="overflow-x-auto">
+            <table className="w-full table-auto text-left">
+              <thead>
+                <tr className="bg-gray-100 text-gray-700 text-sm uppercase">
+                  <th className="py-3 px-4">Order ID</th>
+                  <th className="py-3 px-4">Date</th>
+                  <th className="py-3 px-4">Total</th>
+                  <th className="py-3 px-4">Status</th>
                 </tr>
               </thead>
-              <tbody>
-                {items.map((item, i) => (
-                  <tr key={i} className="border-t">
-                    <td className="p-2 border">{item.name}</td>
-                    <td className="p-2 border">{item.quantity}</td>
-                    <td className="p-2 border">
-                      ₹ {(item.price * item.quantity).toFixed(2)}
+              <tbody className="text-gray-700">
+                {orders.map((order) => (
+                  <tr key={order.id} className="border-b hover:bg-gray-50">
+                    <td className="py-3 px-4 font-medium">
+                      <Link to={`order/{order._id}`}>{order._id}</Link>
+                    </td>
+                    <td className="py-3 px-4">
+                      {" "}
+                      {new Date(order.createdAt).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </td>
+                    <td className="py-3 px-4">{order.totalPrice}</td>
+                    <td className="py-3 px-4">
+                      <span
+                        className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                          statusColors[order.status]
+                        }`}
+                      >
+                        {order.status}
+                      </span>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-          )}
-        </div>
+          </div>
+        )}
       </div>
-
-      {/* Right: Summary */}
-      <div className="bg-gray-100 p-5 rounded shadow h-fit">
-        <h3 className="text-lg font-semibold mb-4">Order Summary</h3>
-        <div className="text-gray-600 space-y-2">
-          <div className="flex justify-between">
-            <span>Subtotal:</span>
-            <span>₹{totalPrice.toFixed(2)}</span>
-          </div>
-          <div className="flex justify-between">
-            <span>Shipping:</span>
-            <span className="text-green-600">Free</span>
-          </div>
-          <div className="flex justify-between">
-            <span>Tax (2%):</span>
-            <span>₹{tax.toFixed(2)}</span>
-          </div>
-          <hr className="my-2" />
-          <div className="flex justify-between font-semibold text-lg">
-            <span>Total:</span>
-            <span>₹{grandTotal.toFixed(2)}</span>
-          </div>
-        </div>
-        <button
-          onClick={handlePlaceOrder}
-          className="mt-6 w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition"
-        >
-          Place Order
-        </button>
-      </div>
-    </div>
+    </Layout>
   );
 };
 

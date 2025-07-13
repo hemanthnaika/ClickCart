@@ -11,4 +11,6 @@ export const {
   IK_URL_ENDPOINT,
   IK_PUBLIC_KEY,
   IK_PRIVATE_KEY,
+  RAZORPAY_KEY_ID,
+  RAZORPAY_KEY_SECRET,
 } = process.env;

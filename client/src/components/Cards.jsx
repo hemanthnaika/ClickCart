@@ -22,11 +22,11 @@ const Cards = ({ product }) => {
   return (
     <div
       onClick={handleCardClick}
-      className="border border-gray-500/20 rounded-md md:px-4 px-3 py-2 bg-white max-w-xs sm:max-w-sm md:max-w-md lg:max-w-[220px]"
+      className="border border-gray-500/20 rounded-md md:px-4 px-3 py-2 bg-white max-w-xs sm:max-w-sm md:max-w-md lg:max-w-[220px] hover:scale-105 transition-all duration-200 shadow-sm hover:shadow-md"
     >
       <div className="group cursor-pointer flex items-center justify-center ">
         <ImageKit
-          className="group-hover:scale-105 transition w-full h-[230px] rounded-md "
+          className=" transition w-full h-[150px] rounded-md "
           src={product.imageUrl[0]}
           alt={product.name}
         />

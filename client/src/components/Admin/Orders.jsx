@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import { fetchOrders } from "../../api/order";
+
 import { fetchAllOrders } from "../../api/allOders";
 import { Link } from "react-router";
 

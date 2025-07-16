@@ -46,7 +46,7 @@ const AuthModal = ({ isOpen, onClose }) => {
     }
   };
   return (
-    <div className="absolute md:inset-0  md:bg-black/50 z-50 flex items-center justify-center ">
+    <div className="absolute md:inset-0  md:bg-black/50 z-50 flex items-center justify-center  h-screen">
       <div className="bg-white max-w-md w-full rounded-2xl p-6 relative shadow-lg animate-fade-in">
         {/* Close Button */}
         <button

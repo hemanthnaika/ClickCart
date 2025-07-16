@@ -1,9 +1,12 @@
 import { Router } from "express";
-import { createOrder, verify } from "../controllers/payment.controller.js";
+import {
+  createRazorpayOrder,
+  verifyPaymentAndCreateOrder,
+} from "./../controllers/payment.controller.js";
 
 const payment = Router();
 
-payment.post("/create-order", createOrder);
-payment.post("/verify", verify);
+payment.post("/create-order", createRazorpayOrder);
+payment.post("/verify", verifyPaymentAndCreateOrder);
 
 export default payment;

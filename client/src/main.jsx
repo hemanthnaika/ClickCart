@@ -23,11 +23,13 @@ import ProductsByCategory from "./pages/Categories.jsx";
 
 import Profile from "./pages/Profile.jsx";
 import Checkout from "./pages/Checkout.jsx";
-import Order from "./pages/Order.jsx";
+
 import OrderSuccess from "./pages/OrderSuccess.jsx";
 import About from "./pages/About.jsx";
 import ContactUs from "./pages/Contact.jsx";
 import Orders from "./components/Admin/Orders.jsx";
+import MyOrder from "./pages/Orders";
+import Order from "./pages/Order.jsx";
 const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
@@ -72,6 +74,10 @@ const router = createBrowserRouter([
       },
       {
         path: "/orders",
+        element: <MyOrder />,
+      },
+      {
+        path: "/order/:id",
         element: <Order />,
       },
       {

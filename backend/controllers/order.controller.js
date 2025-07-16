@@ -4,11 +4,14 @@ export const getUserOrders = async (req, res, next) => {
     const orders = await Order.find({ user: req.user._id })
       .populate("items.product", "name price") // include product name/price
       .sort({ createdAt: -1 });
-
+    if (!orders || orders.length === 0) {
+      const error = new Error("No orders found for this user");
+      error.statusCode = 404;
+      throw error;
+    }
     res.status(200).json({ success: true, orders });
   } catch (error) {
-    console.error("Error fetching orders:", error);
-    res.status(500).json({ success: false, message: "Failed to load orders" });
+    next(error);
   }
 };
 
@@ -75,9 +78,9 @@ export const getUserOrders = async (req, res, next) => {
 //   }
 // };
 
-export const deleteOrder = async (req, res, next) => {
+export const cancelOrder = async (req, res, next) => {
   try {
-    const order = await Order.findByIdAndDelete(req.params.id);
+    const order = await Order.findById(req.params.id);
 
     if (!order) {
       const error = new Error("Order not found");
@@ -85,16 +88,28 @@ export const deleteOrder = async (req, res, next) => {
       throw error;
     }
 
+    // Optional: prevent cancelling delivered or already cancelled orders
+    if (order.status === "Delivered" || order.status === "Cancelled") {
+      return res.status(400).json({
+        success: false,
+        message: `Order cannot be cancelled. Current status: ${order.status}`,
+      });
+    }
+
+    order.status = "Cancelled";
+    await order.save();
+
     res.status(200).json({
       success: true,
-      message: "Order deleted successfully",
+      message: "Order cancelled successfully",
+      order,
     });
   } catch (error) {
     next(error);
   }
 };
 
-export const order = async (req, res, next) => {
+export const getOrder = async (req, res, next) => {
   try {
     const order = await Order.findById(req.params.id);
     if (!order) {
@@ -116,12 +131,15 @@ export const order = async (req, res, next) => {
 export const getAllOrders = async (req, res, next) => {
   try {
     const orders = await Order.find({})
-      .populate("user", "name email") // include user details
+      .populate("user", "name email")
       .sort({ createdAt: -1 });
-
+    if (!orders || orders.length === 0) {
+      const error = new Error("No orders found");
+      error.statusCode = 404;
+      throw error;
+    }
     res.status(200).json({ success: true, orders });
   } catch (error) {
-    console.error("Error fetching all orders:", error);
-    res.status(500).json({ success: false, message: "Failed to load orders" });
+    next(error);
   }
 };

@@ -44,17 +44,10 @@ const CheckoutButton = ({
 
       const { data } = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/v1/payment/create-order`,
-        {
-          userId,
-          amount,
-          items,
-          shippingAddress,
-          paymentMethod,
-          totalPrice,
-        }
+        { amount }
       );
 
-      const { razorpayOrder, orderId, key } = data;
+      const { razorpayOrder, key } = data;
 
       const options = {
         key,
@@ -70,7 +63,11 @@ const CheckoutButton = ({
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
-              orderId,
+              userId,
+              items,
+              shippingAddress,
+              paymentMethod,
+              totalPrice,
             }
           );
 
@@ -79,7 +76,7 @@ const CheckoutButton = ({
             dispatch(clearCart());
             navigate("/order-success");
           } else {
-            toast.error(`Payment failed: ${verificationRes.data.message}`);
+            toast.error(`Payment failed: ${verificationRes}`);
           }
         },
         prefill: {

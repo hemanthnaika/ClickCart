@@ -22,7 +22,7 @@ const Orders = () => {
   return (
     <div className="md:p-10 p-4 space-y-4">
       <h2 className="text-lg font-medium">Orders List</h2>
-      {orders.map((order, index) => (
+      {orders?.map((order, index) => (
         <Link
           to={`/admin/order/${order._id}`}
           key={index}

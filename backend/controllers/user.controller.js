@@ -1,16 +1,38 @@
 import mongoose from "mongoose";
 import User from "../models/user.model.js";
+import Order from "../models/order.model.js";
 
 export const users = async (req, res, next) => {
-  try {
-    const users = await User.find().select("-password");
+ try {
+    const users = await User.find().lean(); // Fetch all users
+
+    const userOrderCounts = await Order.aggregate([
+      {
+        $group: {
+          _id: "$user",
+          orderCount: { $sum: 1 },
+        },
+      },
+    ]);
+
+    // Map userId to orderCount
+    const orderCountMap = {};
+    userOrderCounts.forEach((entry) => {
+      orderCountMap[entry._id.toString()] = entry.orderCount;
+    });
+
+    const result = users.map((user) => ({
+      ...user,
+      orderCount: orderCountMap[user._id.toString()] || 0,
+    }));
+
     res.status(200).json({
       success: true,
       message: "Users fetched successfully",
-      data: users,
+      data: result,
     });
-  } catch (error) {
-    next(error);
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
   }
 };
 

@@ -4,6 +4,7 @@ import {
   getAllOrders,
   getOrder,
   getUserOrders,
+  updateOrderStatus,
 } from "../controllers/order.controller.js";
 import { isAdmin } from "../middleware/isAdmin.middleware.js";
 import { authorize } from "../middleware/auth.middleware.js";
@@ -16,5 +17,7 @@ orderRouter.patch("/cancel/:id", authorize, cancelOrder);
 
 // Private Routes
 orderRouter.get("/", isAdmin, getAllOrders);
+orderRouter.get("/:id", isAdmin, getOrder);
+orderRouter.patch("/:id/status", isAdmin, updateOrderStatus);
 
 export default orderRouter;

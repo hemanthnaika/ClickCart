@@ -1,7 +1,7 @@
 import React from "react";
 import Layout from "../Layout";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Link } from "react-router"; // use react-router-dom
+import { Link } from "react-router"; // corrected
 import { cancelOrder, fetchOrders } from "./../api/order";
 import toast from "react-hot-toast";
 
@@ -51,6 +51,24 @@ const MyOrder = () => {
       minute: "2-digit",
       hour12: true,
     });
+  };
+
+  // ✅ Helper function for dynamic status color
+  const getStatusClasses = (status) => {
+    switch (status) {
+      case "Order Placed":
+        return "bg-blue-100 text-blue-800";
+      case "Shipped":
+        return "bg-indigo-100 text-indigo-800";
+      case "Out for Delivery":
+        return "bg-amber-100 text-amber-800";
+      case "Delivered":
+        return "bg-green-100 text-green-800";
+      case "Cancelled":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
   };
 
   return (
@@ -103,13 +121,9 @@ const MyOrder = () => {
                         Status:
                       </dt>
                       <dd
-                        className={`me-2 mt-1.5 inline-flex items-center rounded px-2.5 py-0.5 text-xs font-medium ${
-                          order.status === "Paid"
-                            ? "bg-green-100 text-green-800"
-                            : order.status === "Cancelled"
-                            ? "bg-red-100 text-red-800"
-                            : "bg-yellow-100 text-yellow-800"
-                        }`}
+                        className={`me-2 mt-1.5 inline-flex items-center rounded px-2.5 py-0.5 text-xs font-medium ${getStatusClasses(
+                          order.status
+                        )}`}
                       >
                         {order.status}
                       </dd>

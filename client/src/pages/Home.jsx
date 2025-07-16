@@ -6,6 +6,7 @@ import NewsletterCard from "../components/NewsletterCard";
 import { useQuery } from "@tanstack/react-query";
 import { fetchProducts } from "../api/products";
 import CardSkeleton from "../components/CardSkeleton";
+import toast from "react-hot-toast";
 
 const Home = () => {
   const { data, isLoading, isError, error } = useQuery({
@@ -14,7 +15,9 @@ const Home = () => {
     retry: false,
     refetchOnWindowFocus: false,
   });
-
+  if (isError) {
+    toast.error(error);
+  }
   return (
     <Layout>
       <HeroCarousel />
@@ -108,7 +111,8 @@ const Home = () => {
           ? Array(8)
               .fill(0)
               .map((_, i) => <CardSkeleton key={i} />)
-          : [...data]
+          : data &&
+            [...data]
               .reverse()
               .map((product) => <Cards key={product._id} product={product} />)}
       </div>

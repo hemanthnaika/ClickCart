@@ -30,6 +30,8 @@ import ContactUs from "./pages/Contact.jsx";
 import Orders from "./components/Admin/Orders.jsx";
 import MyOrder from "./pages/Orders";
 import Order from "./pages/Order.jsx";
+import EditOrder from "./components/Admin/EditOrder";
+import AllUsers from "./components/Admin/AllUsers.jsx";
 const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
@@ -100,6 +102,9 @@ const router = createBrowserRouter([
               { path: "all-categories", element: <AllCategory /> },
               { path: "all-products", element: <AllProduct /> },
               { path: "all-orders", element: <Orders /> },
+              { path: "edit-order/:id", element: <EditOrder /> },
+              { path: "all-users", element: <AllUsers /> },
+
             ],
           },
         ],

@@ -5,6 +5,7 @@ import ImageKit from "./ImgKit";
 import { toast } from "react-hot-toast";
 
 const Cards = ({ product }) => {
+  console.log(product);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const categories = useSelector((state) => state.categories.categories);

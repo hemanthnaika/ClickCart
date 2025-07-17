@@ -27,7 +27,6 @@ const Order = () => {
 
   const isCancelled = data?.status === "Cancelled";
 
-  // Steps shown based on status
   const steps = isCancelled
     ? ["Order Placed", "Cancelled"]
     : ["Order Placed", "Shipped", "Out for Delivery", "Delivered"];
@@ -51,7 +50,6 @@ const Order = () => {
               Placed on: {formatDate(data.createdAt)}
             </p>
 
-            {/* Progress Tracker */}
             <div className="mb-10">
               <div className="relative flex justify-between items-center">
                 {steps.map((step, index) => {
@@ -93,10 +91,7 @@ const Order = () => {
                   );
                 })}
 
-                {/* Gray background line */}
                 <div className="absolute top-4 left-4 right-4 h-1 bg-gray-200 z-0 rounded" />
-
-                {/* Progress line */}
                 <div
                   className={`absolute top-4 left-4 h-1 z-0 rounded transition-all duration-500 ${
                     isCancelled ? "bg-red-500" : "bg-blue-500"
@@ -108,7 +103,6 @@ const Order = () => {
               </div>
             </div>
 
-            {/* Order Items */}
             <div className="mb-8">
               <h2 className="text-lg font-semibold mb-3">Order Items</h2>
               <div className="space-y-4">
@@ -122,10 +116,8 @@ const Order = () => {
               </div>
             </div>
 
-            {/* Order Summary */}
             <div className="border-t pt-6 space-y-2">
               <h2 className="text-lg font-semibold mb-2">Order Summary</h2>
-
               <p>
                 <strong>Total:</strong> ₹ {data.totalPrice}
               </p>
@@ -148,6 +140,10 @@ const Order = () => {
               </p>
               <p>
                 <strong>Payment Method:</strong> {data.paymentMethod}
+              </p>
+              <p>
+                <strong>Delivery Date:</strong>{" "}
+                {data.deliveryDate ? formatDate(data.deliveryDate) : "Pending"}
               </p>
               <Invoice order={data} />
             </div>

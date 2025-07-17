@@ -64,7 +64,6 @@ const EditOrder = () => {
     },
   });
 
-  // Fetch product details when order is loaded
   useEffect(() => {
     const fetchAllProducts = async () => {
       if (!order?.items) return;
@@ -80,7 +79,6 @@ const EditOrder = () => {
         });
         setProductInfoMap(map);
       } catch (err) {
-        
         toast.error("Failed to fetch product details");
       }
     };
@@ -106,6 +104,17 @@ const EditOrder = () => {
     (status) => status !== order.status
   );
 
+  // Format function
+  const formatDateTime = (dateString) =>
+    new Date(dateString).toLocaleString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+
   return (
     <div className="p-6 max-w-4xl mx-auto bg-white shadow rounded">
       <h2 className="text-2xl font-bold mb-6">Edit Order</h2>
@@ -130,8 +139,13 @@ const EditOrder = () => {
           <strong>Total Price:</strong> ₹ {order.totalPrice}
         </p>
         <p>
-          <strong>Date:</strong> {new Date(order.createdAt).toLocaleString()}
+          <strong>Order Date:</strong> {formatDateTime(order.createdAt)}
         </p>
+        {order.status === "Delivered" && order.deliveredAt && (
+          <p>
+            <strong>Delivered Date:</strong> {formatDateTime(order.deliveredAt)}
+          </p>
+        )}
       </div>
 
       {/* Shipping Address */}

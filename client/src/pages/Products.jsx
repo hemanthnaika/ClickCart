@@ -5,6 +5,8 @@ import { FilterIcon } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchProducts } from "../api/products";
 import { useSelector } from "react-redux";
+import Spinner from "../components/Spinner";
+import { noData } from "../assets/img";
 
 const Products = () => {
   const [price, setPrice] = useState(100000);
@@ -111,11 +113,11 @@ const Products = () => {
         {/* Product Grid */}
         <div className="w-full lg:w-4/5">
           {isLoading ? (
-            <p>Loading products...</p>
+            <Spinner />
           ) : isError ? (
             <p className="text-red-600">Error: {error.message}</p>
           ) : filteredProducts.length === 0 ? (
-            <p>No products match the selected filters.</p>
+            <img src={noData}  className="w-1/2 mx-auto"/>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {filteredProducts.map((product) => (

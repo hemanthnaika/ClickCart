@@ -1,14 +1,15 @@
 import Razorpay from "razorpay";
 import crypto from "crypto";
-import Order from "../models/order.model.js"; // path to your order model
+import Order from "../models/order.model.js";
 import mongoose from "mongoose";
-import User from "./../models/user.model.js";
+import Product from "../models/product.model.js";
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
   key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
+// Create Razorpay order
 export const createRazorpayOrder = async (req, res, next) => {
   try {
     const { amount } = req.body;
@@ -19,7 +20,7 @@ export const createRazorpayOrder = async (req, res, next) => {
     }
 
     const razorpayOrder = await razorpay.orders.create({
-      amount: amount * 100,
+      amount: amount * 100, // Razorpay expects amount in paise
       currency: "INR",
       payment_capture: 1,
     });
@@ -33,10 +34,10 @@ export const createRazorpayOrder = async (req, res, next) => {
     next(error);
   }
 };
-
 export const verifyPaymentAndCreateOrder = async (req, res, next) => {
   const session = await mongoose.startSession();
   session.startTransaction();
+
   try {
     const {
       razorpay_order_id,
@@ -47,6 +48,7 @@ export const verifyPaymentAndCreateOrder = async (req, res, next) => {
       shippingAddress,
       paymentMethod,
       totalPrice,
+      deliveryDate,
     } = req.body;
 
     if (
@@ -62,6 +64,7 @@ export const verifyPaymentAndCreateOrder = async (req, res, next) => {
       throw new Error("Missing required fields");
     }
 
+    // Step 1: Verify payment signature
     const body = razorpay_order_id + "|" + razorpay_payment_id;
     const expectedSignature = crypto
       .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
@@ -72,6 +75,23 @@ export const verifyPaymentAndCreateOrder = async (req, res, next) => {
       throw new Error("Invalid payment signature");
     }
 
+    // Step 2: Reduce stock for each product
+    for (const item of items) {
+      const product = await Product.findById(item.product).session(session);
+
+      if (!product) {
+        throw new Error(`Product not found: ${item.product}`);
+      }
+
+      if (product.stock < item.quantity) {
+        throw new Error(`Not enough stock for product: ${product.name}`);
+      }
+
+      product.stock -= item.quantity;
+      await product.save({ session });
+    }
+
+    // Step 3: Create order in DB
     const [order] = await Order.create(
       [
         {
@@ -82,6 +102,7 @@ export const verifyPaymentAndCreateOrder = async (req, res, next) => {
           paymentMethod,
           paymentId: razorpay_payment_id,
           orderId: razorpay_order_id,
+          deliveryDate: deliveryDate ? new Date(deliveryDate) : null,
         },
       ],
       { session }
@@ -92,7 +113,7 @@ export const verifyPaymentAndCreateOrder = async (req, res, next) => {
 
     return res.status(201).json({
       success: true,
-      message: "Payment verified and order created",
+      message: "Payment verified, stock updated, and order created",
       order,
     });
   } catch (error) {

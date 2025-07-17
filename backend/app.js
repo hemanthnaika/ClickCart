@@ -16,8 +16,8 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:5173", // or use a whitelist for production
-    credentials: true, // 💥 this is required!
+    origin: "http://localhost:5173",
+    credentials: true,
   })
 );
 

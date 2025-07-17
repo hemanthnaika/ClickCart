@@ -45,6 +45,9 @@ const orderSchema = new mongoose.Schema(
       type: String,
       required: [true, "Payment method is required"],
     },
+    deliveryDate: {
+      type: Date,
+    },
   },
   { timestamps: true }
 );

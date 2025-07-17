@@ -53,7 +53,7 @@ const MyOrder = () => {
     });
   };
 
-  // ✅ Helper function for dynamic status color
+  // ✅ Dynamic status color
   const getStatusClasses = (status) => {
     switch (status) {
       case "Order Placed":
@@ -89,6 +89,7 @@ const MyOrder = () => {
                     key={order._id}
                     className="flex flex-wrap items-center gap-y-4 py-6"
                   >
+                    {/* Order ID */}
                     <dl className="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
                       <dt className="text-base font-medium text-gray-500">
                         Order ID:
@@ -98,6 +99,7 @@ const MyOrder = () => {
                       </dd>
                     </dl>
 
+                    {/* Order Date */}
                     <dl className="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
                       <dt className="text-base font-medium text-gray-500">
                         Date:
@@ -107,6 +109,19 @@ const MyOrder = () => {
                       </dd>
                     </dl>
 
+                    {/* Delivery Date */}
+                    <dl className="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
+                      <dt className="text-base font-medium text-gray-500">
+                        Delivery Date:
+                      </dt>
+                      <dd className="mt-1.5 text-base font-semibold text-gray-900 pr-10">
+                        {order.deliveryDate
+                          ? formatDate(order.deliveryDate)
+                          : "Not Assigned"}
+                      </dd>
+                    </dl>
+
+                    {/* Price */}
                     <dl className="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
                       <dt className="text-base font-medium text-gray-500">
                         Price:
@@ -116,6 +131,7 @@ const MyOrder = () => {
                       </dd>
                     </dl>
 
+                    {/* Status */}
                     <dl className="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
                       <dt className="text-base font-medium text-gray-500">
                         Status:
@@ -129,8 +145,9 @@ const MyOrder = () => {
                       </dd>
                     </dl>
 
+                    {/* Actions */}
                     <div className="w-full grid sm:grid-cols-2 lg:flex lg:w-64 lg:items-center lg:justify-end gap-4">
-                      {/* Cancel Button */}
+                      {/* Cancel */}
                       {order.status !== "Cancelled" &&
                         order.status !== "Delivered" && (
                           <button
@@ -142,7 +159,7 @@ const MyOrder = () => {
                           </button>
                         )}
 
-                      {/* View Details */}
+                      {/* View */}
                       <Link
                         to={`/order/${order._id}`}
                         className="w-full inline-flex justify-center rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 lg:w-auto"

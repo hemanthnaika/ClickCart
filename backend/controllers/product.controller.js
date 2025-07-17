@@ -2,10 +2,10 @@ import mongoose from "mongoose";
 import Product from "./../models/product.model.js";
 import Category from "../models/category.model.js";
 
-// GET all products
+// GET all products (only in-stock)
 export const products = async (req, res, next) => {
   try {
-    const products = await Product.find();
+    const products = await Product.find({ stock: { $gt: 0 } });
     res.status(200).json({
       success: true,
       message: "Products fetched successfully",
@@ -16,15 +16,17 @@ export const products = async (req, res, next) => {
   }
 };
 
-// GET single product by ID
+// GET single product by ID (optional: hide out of stock product)
 export const product = async (req, res, next) => {
   try {
     const product = await Product.findById(req.params.id);
-    if (!product) {
-      const error = new Error("Product not found");
+
+    if (!product || product.stock === 0) {
+      const error = new Error("Product not found or out of stock");
       error.statusCode = 404;
       throw error;
     }
+
     res.status(200).json({
       success: true,
       message: "Product fetched successfully",
@@ -177,7 +179,7 @@ export const deleteProduct = async (req, res, next) => {
   }
 };
 
-// SEARCH products
+// SEARCH products (only in-stock)
 export const searchProducts = async (req, res, next) => {
   try {
     const query = req.query.q;
@@ -188,6 +190,7 @@ export const searchProducts = async (req, res, next) => {
 
     const products = await Product.find({
       name: { $regex: query, $options: "i" },
+      stock: { $gt: 0 },
     });
 
     res.status(200).json({

@@ -17,16 +17,13 @@ const CheckoutButton = ({
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const user = useSelector((state) => state.auth.user?.user);
+
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {
       const script = document.createElement("script");
       script.src = "https://checkout.razorpay.com/v1/checkout.js";
-      script.onload = () => {
-        resolve(true);
-      };
-      script.onerror = () => {
-        resolve(false);
-      };
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
       document.body.appendChild(script);
     });
   };
@@ -42,6 +39,11 @@ const CheckoutButton = ({
     try {
       setLoading(true);
 
+      // Generate delivery date: 5 days from now
+      const deliveryDate = new Date();
+      deliveryDate.setDate(deliveryDate.getDate() + 5);
+
+      // Create Razorpay Order
       const { data } = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/v1/payment/create-order`,
         { amount }
@@ -57,6 +59,7 @@ const CheckoutButton = ({
         description: "Order Payment",
         order_id: razorpayOrder.id,
         handler: async function (response) {
+          // Send payment + order details to backend
           const verificationRes = await axios.post(
             `${import.meta.env.VITE_API_URL}/api/v1/payment/verify`,
             {
@@ -68,6 +71,7 @@ const CheckoutButton = ({
               shippingAddress,
               paymentMethod,
               totalPrice,
+              deliveryDate: deliveryDate.toISOString(), // Include delivery date
             }
           );
 
@@ -76,11 +80,11 @@ const CheckoutButton = ({
             dispatch(clearCart());
             navigate("/order-success");
           } else {
-            toast.error(`Payment failed: ${verificationRes}`);
+            toast.error(`Payment failed: ${verificationRes.data.message}`);
           }
         },
         prefill: {
-          name: user?.name || "Customer Name",
+          name: user?.name || "Customer",
           email: user?.email || "customer@example.com",
           contact: user?.phoneNumber || "9999999999",
         },
@@ -93,7 +97,7 @@ const CheckoutButton = ({
       rzp.open();
     } catch (error) {
       console.error(error);
-      alert("Payment error: " + error.message);
+      toast.error("Payment error: " + error.message);
     } finally {
       setLoading(false);
     }

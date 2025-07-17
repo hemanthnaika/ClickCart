@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { aboutImage } from "../assets/img";
+import { aboutImage, contact } from "../assets/img";
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
@@ -33,12 +33,12 @@ const ContactUs = () => {
         </div>
 
         <div className="mt-12 grid  items-center lg:grid-cols-2 gap-6 lg:gap-16 ">
-          <div className="flex flex-col border border-gray-300 rounded-xl p-4 sm:p-6 lg:p-8 bg-white">
+          <div className="flex flex-col border border-gray-300 rounded-xl p-4 sm:p-6 lg:p-8 bg-white md:order-1 order-2 ">
             <h2 className="mb-8 text-xl font-semibold text-black">
               Fill in the form
             </h2>
             <form onSubmit={handleSubmit}>
-              <div className="grid gap-4">
+              <div className="grid gap-4 ">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <input
                     type="text"
@@ -101,8 +101,8 @@ const ContactUs = () => {
             </form>
           </div>
 
-          <div className="divide-y divide-gray-300">
-            <img src={aboutImage} alt="" />
+          <div className="divide-y divide-gray-300 order-1 ">
+            <img src={contact} alt="contact" />
           </div>
         </div>
       </div>

@@ -125,12 +125,14 @@ export const getProductsByCategory = async (req, res, next) => {
       error.statusCode = 404;
       throw error;
     }
-
-    const products = await Product.find({ category: category._id });
+    const products = await Product.find({
+      category: category._id,
+      stock: { $gt: 0 },
+    });
 
     res.status(200).json({
       success: true,
-      message: "Products fetched successfully for this category",
+      message: "In-stock products fetched successfully for this category",
       category: category.name,
       data: products,
     });

@@ -3,9 +3,8 @@ import User from "../models/user.model.js";
 import Order from "../models/order.model.js";
 
 export const users = async (req, res, next) => {
- try {
+  try {
     const users = await User.find().lean(); // Fetch all users
-
     const userOrderCounts = await Order.aggregate([
       {
         $group: {
@@ -32,7 +31,7 @@ export const users = async (req, res, next) => {
       data: result,
     });
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    next(err);
   }
 };
 
@@ -57,7 +56,7 @@ export const deleteUser = async (req, res, next) => {
   const session = await mongoose.startSession();
   session.startTransaction();
   try {
-    const user = await User.findById(req.params._id).session(session);
+    const user = await User.findById(req.params.id).session(session);
     if (!user) {
       const error = new Error("User not found");
       error.statusCode = 404;

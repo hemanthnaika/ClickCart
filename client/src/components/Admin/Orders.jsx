@@ -1,6 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
 import React from "react";
-
+import { useQuery } from "@tanstack/react-query";
 import { fetchAllOrders } from "../../api/allOders";
 import { Link } from "react-router";
 
@@ -16,66 +15,104 @@ const Orders = () => {
     retry: false,
     refetchOnWindowFocus: false,
   });
+
   const boxIcon =
     "https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/e-commerce/boxIcon.svg";
-  console.log(orders);
+
+  // Function to return color classes based on status
+  const getStatusStyles = (status) => {
+    switch (status) {
+      case "Pending":
+        return "bg-yellow-100 text-yellow-800";
+      case "Paid":
+        return "bg-blue-100 text-blue-800";
+      case "Shipped":
+        return "bg-indigo-100 text-indigo-800";
+      case "Out for Delivery":
+        return "bg-amber-100 text-amber-800";
+      case "Delivered":
+        return "bg-green-100 text-green-800";
+      case "Cancelled":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
+  };
+
+  if (isLoading) return <p className="text-center py-10">Loading orders...</p>;
+  if (isError)
+    return <p className="text-center text-red-600 py-10">{error.message}</p>;
+
   return (
-    <div className="md:p-10 p-4 space-y-4">
-      <h2 className="text-lg font-medium">Orders List</h2>
-      {orders?.map((order, index) => (
-        <Link
-          to={`/admin/edit-order/${order._id}`}
-          key={index}
-          className="flex flex-col md:grid md:grid-cols-[2fr_1fr_1fr_1fr] md:items-center gap-5 p-5 max-w-7xl rounded-md border border-gray-300 text-gray-800"
-        >
-          <div className="flex gap-5">
-            <img
-              className="w-12 h-12 object-cover opacity-60"
-              src={boxIcon}
-              alt="boxIcon"
-            />
-          </div>
+    <div className="max-w-7xl mx-auto p-4 md:p-10 space-y-6">
+      <h2 className="text-2xl font-bold text-gray-800">All Orders</h2>
 
-          <div className="text-sm">
-            <p className="font-medium mb-1">
-              {order.user.name} ({order.user.email})
-            </p>
-            <p>Address: {order.shippingAddress}</p>
-          </div>
+      {orders?.length === 0 ? (
+        <p className="text-center text-gray-500">No orders found.</p>
+      ) : (
+        <div className="space-y-5">
+          {orders.map((order) => (
+            <Link
+              to={`/admin/edit-order/${order._id}`}
+              key={order._id}
+              className="block border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all p-5 bg-white"
+            >
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6 items-center">
+                {/* Icon and user info */}
+                <div className="flex items-center gap-4">
+                  <img
+                    src={boxIcon}
+                    alt="Order Icon"
+                    className="w-12 h-12 object-contain opacity-60"
+                  />
+                  <div className="text-sm md:text-base">
+                    <p className="font-semibold text-gray-800">
+                      {order.user.name}
+                    </p>
+                    <p className="text-gray-500 text-xs md:text-sm">
+                      {order.user.email}
+                    </p>
+                  </div>
+                </div>
 
-          <p className="font-medium text-base my-auto text-black/70">
-            ₹.{order.totalPrice}
-          </p>
+                {/* Address */}
+                <div className="text-sm text-gray-600">
+                  <p>
+                    <span className="font-medium">Address:</span>{" "}
+                    {order.shippingAddress}
+                  </p>
+                </div>
 
-          <div className="flex flex-col text-sm">
-            <p>Method: {order.paymentMethod}</p>
-            <p>
-              Date:{" "}
-              {new Date(order.createdAt).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-              })}
-            </p>
-            <p className="text-gray-500">
-              Status:{" "}
-              <span
-                className={`px-2 py-1 rounded-md text-xs font-medium ${
-                  order.status === "Paid"
-                    ? "bg-green-100 text-green-800"
-                    : order.status === "Pending"
-                    ? "bg-yellow-100 text-yellow-800"
-                    : order.status === "Shipped"
-                    ? "bg-blue-100 text-blue-800"
-                    : "bg-red-100 text-red-800"
-                }`}
-              >
-                {order.status}
-              </span>
-            </p>
-          </div>
-        </Link>
-      ))}
+                {/* Payment info */}
+                <div className="flex flex-col text-sm md:text-base text-gray-700">
+                  <p className="font-semibold text-black">
+                    ₹{order.totalPrice.toFixed(2)}
+                  </p>
+                  <p>Method: {order.paymentMethod}</p>
+                  <p className="text-xs text-gray-500">
+                    {new Date(order.createdAt).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </p>
+                </div>
+
+                {/* Status Badge */}
+                <div className="text-sm">
+                  <span
+                    className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${getStatusStyles(
+                      order.status
+                    )}`}
+                  >
+                    {order.status}
+                  </span>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

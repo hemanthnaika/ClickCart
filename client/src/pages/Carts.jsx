@@ -115,7 +115,7 @@ const Carts = () => {
           </div>
         ))}
 
-        <button className="group cursor-pointer flex items-center mt-8 gap-2 text-indigo-500 font-medium">
+        <Link className="group cursor-pointer flex items-center mt-8 gap-2 text-indigo-500 font-medium" to="/products">
           <svg
             width="15"
             height="11"
@@ -132,7 +132,7 @@ const Carts = () => {
             />
           </svg>
           Continue Shopping
-        </button>
+        </Link>
       </div>
 
       <div className="max-w-[360px] w-full bg-gray-100/40 p-5 max-md:mt-16 border border-gray-300/70">

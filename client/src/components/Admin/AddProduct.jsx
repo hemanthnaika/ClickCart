@@ -110,34 +110,7 @@ const AddProduct = () => {
           className="md:p-10 p-4 space-y-5 max-w-lg"
           onSubmit={handleSubmit}
         >
-          <div>
-            <p className="text-base font-medium">Product Images</p>
-            <div className="flex flex-wrap items-center gap-3 mt-2">
-              {Array(4)
-                .fill("")
-                .map((_, index) => (
-                  <Upload
-                    key={index}
-                    type="image"
-                    setProgress={setProgress}
-                    setData={(fileData) => handleImageUpload(index, fileData)}
-                  >
-                    <label>
-                      <ImageKit
-                        className="max-w-24 cursor-pointer rounded border"
-                        src={
-                          cover[index]?.filePath ||
-                          "https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/e-commerce/uploadArea.png"
-                        }
-                        alt="uploadArea"
-                        width={100}
-                        height={100}
-                      />
-                    </label>
-                  </Upload>
-                ))}
-            </div>
-          </div>
+          
 
           <div className="flex flex-col gap-1 max-w-md">
             <label className="text-base font-medium" htmlFor="product-name">
@@ -247,7 +220,34 @@ const AddProduct = () => {
               />
             </div>
           </div>
-
+<div>
+            <p className="text-base font-medium">Product Images</p>
+            <div className="flex flex-wrap items-center gap-3 mt-2">
+              {Array(4)
+                .fill("")
+                .map((_, index) => (
+                  <Upload
+                    key={index}
+                    type="image"
+                    setProgress={setProgress}
+                    setData={(fileData) => handleImageUpload(index, fileData)}
+                  >
+                    <label>
+                      <ImageKit
+                        className="max-w-24 cursor-pointer rounded border"
+                        src={
+                          cover[index]?.filePath ||
+                          "https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/e-commerce/uploadArea.png"
+                        }
+                        alt="uploadArea"
+                        width={100}
+                        height={100}
+                      />
+                    </label>
+                  </Upload>
+                ))}
+            </div>
+          </div>
           <button
             disabled={mutation.isPending || (progress > 0 && progress < 100)}
             className={`px-8 py-2.5 text-white font-medium rounded transition ${

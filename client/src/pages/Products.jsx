@@ -119,7 +119,7 @@ const Products = () => {
           ) : filteredProducts.length === 0 ? (
             <img src={noData}  className="w-1/2 mx-auto"/>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-4">
               {filteredProducts.map((product) => (
                 <Cards key={product._id} product={product} />
               ))}

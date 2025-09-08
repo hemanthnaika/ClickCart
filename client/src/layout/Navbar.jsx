@@ -260,13 +260,14 @@ const Navbar = () => {
                   handleLogout();
                   setOpen(false);
                 }}
-                className="text-sm text-red-600 mt-2"
+                className="text-xl text-red-600 mt-2"
               >
                 Logout
               </button>
             ) : (
               <LoginModal />
             )}
+            {isAdmin && <Link to="/admin">Admin</Link>}
           </div>
         )}
       </nav>

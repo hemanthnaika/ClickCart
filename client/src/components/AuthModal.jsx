@@ -51,7 +51,7 @@ const AuthModal = ({ isOpen, onClose }) => {
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 text-gray-500 hover:text-gray-800"
+          className="absolute top-5 right-7 text-gray-500 hover:text-gray-800 cursor-pointer"
         >
           ✕
         </button>

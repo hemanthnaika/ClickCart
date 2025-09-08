@@ -105,7 +105,7 @@ const Order = () => {
 
             <div className="mb-8">
               <h2 className="text-lg font-semibold mb-3">Order Items</h2>
-              <div className="space-y-4">
+              <div className="space-y-1">
                 {data.items.map((item) => (
                   <OrderCard
                     key={item._id}
@@ -145,7 +145,7 @@ const Order = () => {
                 <strong>Delivery Date:</strong>{" "}
                 {data.deliveryDate ? formatDate(data.deliveryDate) : "Pending"}
               </p>
-              <Invoice order={data} />
+             {data.status === "Delivered" && <Invoice order={data} />}
             </div>
           </>
         )}

@@ -36,7 +36,7 @@ const ProductsByCategory = () => {
             {categoryName || "Unknown Category"}
           </span>
         </h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
           {data.length > 0 ? (
             data.map((product) => <Cards key={product._id} product={product} />)
           ) : (

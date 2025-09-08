@@ -18,12 +18,9 @@ import AddCategory from "./components/Admin/AddCategory.jsx";
 import AddProduct from "./components/Admin/AddProduct.jsx";
 import AllCategory from "./components/Admin/AllCategory.jsx";
 import AllProduct from "./components/Admin/AllProduct.jsx";
-
 import ProductsByCategory from "./pages/Categories.jsx";
-
 import Profile from "./pages/Profile.jsx";
 import Checkout from "./pages/Checkout.jsx";
-
 import OrderSuccess from "./pages/OrderSuccess.jsx";
 import About from "./pages/About.jsx";
 import ContactUs from "./pages/Contact.jsx";
@@ -32,6 +29,7 @@ import MyOrder from "./pages/Orders";
 import Order from "./pages/Order.jsx";
 import EditOrder from "./components/Admin/EditOrder";
 import AllUsers from "./components/Admin/AllUsers.jsx";
+
 const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
@@ -104,7 +102,6 @@ const router = createBrowserRouter([
               { path: "all-orders", element: <Orders /> },
               { path: "edit-order/:id", element: <EditOrder /> },
               { path: "all-users", element: <AllUsers /> },
-
             ],
           },
         ],

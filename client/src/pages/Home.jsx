@@ -22,13 +22,13 @@ const Home = () => {
     <Layout>
       <HeroCarousel />
       <h1 className="text-2xl font-bold py-5">Popular Products</h1>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-x-1 gap-y-5">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-x-1 gap-y-5">
         {isLoading
           ? Array(4)
               .fill(0)
               .map((_, i) => <CardSkeleton key={i} />)
           : data
-              ?.filter((product) => product.popular) // ✅ only popular ones
+              ?.filter((product) => product.popular)
               .map((product) => <Cards key={product._id} product={product} />)}
       </div>
 
@@ -42,7 +42,7 @@ const Home = () => {
       <h1 className="text-2xl font-bold py-5 text-center ">
         Featured Products
       </h1>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-x-1 gap-y-5">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-x-1 gap-y-5">
         {isLoading
           ? Array(4)
               .fill(0)
@@ -106,7 +106,7 @@ const Home = () => {
         </div>
       </div>
       <h1 className="text-2xl font-bold py-5 text-center">New Arrivals</h1>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-x-1 gap-y-5">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-x-1 gap-y-5">
         {isLoading
           ? Array(8)
               .fill(0)

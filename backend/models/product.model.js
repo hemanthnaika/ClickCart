@@ -15,6 +15,14 @@ const productSchema = new mongoose.Schema(
     imageUrl: [String],
     featured: { type: Boolean, default: false },
     popular: { type: Boolean, default: false },
+    averageRating: {
+      type: Number,
+      default: 0,
+    },
+    numReviews: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );

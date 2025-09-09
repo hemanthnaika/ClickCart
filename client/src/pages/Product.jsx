@@ -50,12 +50,14 @@ const Product = () => {
 
   const categoryName =
     reduxCategories.find((c) => c._id === product.category)?.name || "Unknown";
+
   const handleAddToCart = (e) => {
     e.stopPropagation();
     toast.success(`"${product.name}" added to cart!`);
-    dispatch(addToCart(product)); // Add to redux + localStorage
+    dispatch(addToCart(product));
     navigate("/cart");
   };
+
   return (
     <Layout>
       <div className="max-w- w-full px-6">
@@ -82,13 +84,11 @@ const Product = () => {
                     thumbnail === image ? "ring-2 ring-indigo-500" : ""
                   }`}
                 >
-                  {/* Blurred background */}
                   <img
                     src={image}
                     alt={`Thumbnail ${index + 1}`}
                     className="absolute inset-0 w-full h-full object-cover blur-sm scale-110"
                   />
-                  {/* Main thumbnail image */}
                   <ImageKit
                     src={image}
                     alt={`Thumbnail ${index + 1}`}
@@ -124,7 +124,7 @@ const Product = () => {
               {Array(5)
                 .fill("")
                 .map((_, i) =>
-                  4 > i ? (
+                  product.averageRating > i ? (
                     <svg
                       key={i}
                       width="14"
@@ -140,6 +140,7 @@ const Product = () => {
                     </svg>
                   ) : (
                     <svg
+                      key={i}
                       width="14"
                       height="13"
                       viewBox="0 0 18 17"
@@ -149,12 +150,12 @@ const Product = () => {
                       <path
                         d="M8.04894 0.927049C8.3483 0.00573802 9.6517 0.00574017 9.95106 0.927051L11.2451 4.90983C11.379 5.32185 11.763 5.60081 12.1962 5.60081H16.3839C17.3527 5.60081 17.7554 6.84043 16.9717 7.40983L13.5838 9.87132C13.2333 10.126 13.0866 10.5773 13.2205 10.9894L14.5146 14.9721C14.8139 15.8934 13.7595 16.6596 12.9757 16.0902L9.58778 13.6287C9.2373 13.374 8.7627 13.374 8.41221 13.6287L5.02426 16.0902C4.24054 16.6596 3.18607 15.8934 3.48542 14.9721L4.7795 10.9894C4.91338 10.5773 4.76672 10.126 4.41623 9.87132L1.02827 7.40983C0.244561 6.84043 0.647338 5.60081 1.61606 5.60081H5.8038C6.23703 5.60081 6.62099 5.32185 6.75486 4.90983L8.04894 0.927049Z"
                         fill="#615fff"
-                        fill-opacity="0.35"
+                        fillOpacity="0.35"
                       />
                     </svg>
                   )
                 )}
-              <p className="text-base ml-2">({4})</p>
+              <p className="text-base ml-2">({product.numReviews})</p>
             </div>
 
             <div className="mt-6 flex flex-col gap-2">
@@ -190,6 +191,38 @@ const Product = () => {
               >
                 Buy Now
               </button>
+            </div>
+            {/* ------------------ Reviews Section ------------------ */}
+            <div className="mt-10">
+              <h2 className="text-2xl font-bold mb-4">Customer Reviews</h2>
+              {product.reviews?.length > 0 ? (
+                <div className="flex flex-col gap-4">
+                  {product.reviews.map((review) => (
+                    <div
+                      key={review._id}
+                      className="border border-gray-300 rounded-lg p-4"
+                    >
+                      <p className="font-semibold text-lg">
+                        {review.user.name}
+                      </p>
+                      <div className="flex items-center gap-1 text-yellow-500 mt-1">
+                        {Array.from({ length: 5 }, (_, i) => (
+                          <span key={i} className="text-2xl">
+                            {i < review.rating ? "★" : "☆"}
+                          </span>
+                        ))}
+                      </div>
+                      {review.comment && (
+                        <p className="text-gray-700 mt-1 text-md">
+                          {review.comment}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-gray-500">No reviews yet.</p>
+              )}
             </div>
           </div>
         </div>

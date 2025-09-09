@@ -6,6 +6,7 @@ import Layout from "../Layout";
 import OrderCard from "../components/orderCard";
 import { CheckCircle, Circle } from "lucide-react";
 import Invoice from "../components/Invoice";
+import ReviewForm from "./../components/ReviewForm";
 
 const Order = () => {
   const { id } = useParams();
@@ -105,13 +106,14 @@ const Order = () => {
 
             <div className="mb-8">
               <h2 className="text-lg font-semibold mb-3">Order Items</h2>
-              <div className="space-y-1">
+              <div className=" grid md:grid-cols-2 gap-4">
                 {data.items.map((item) => (
-                  <OrderCard
-                    key={item._id}
-                    id={item.product}
-                    quantity={item.quantity}
-                  />
+                  <div key={item._id} className="border px-5 py-2 rounded-md">
+                    <OrderCard id={item.product} quantity={item.quantity} />
+                    {data.status === "Delivered" && (
+                      <ReviewForm productId={item.product} />
+                    )}
+                  </div>
                 ))}
               </div>
             </div>
@@ -145,7 +147,8 @@ const Order = () => {
                 <strong>Delivery Date:</strong>{" "}
                 {data.deliveryDate ? formatDate(data.deliveryDate) : "Pending"}
               </p>
-             {data.status === "Delivered" && <Invoice order={data} />}
+
+              {data.status === "Delivered" && <Invoice order={data} />}
             </div>
           </>
         )}

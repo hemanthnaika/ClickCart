@@ -27,7 +27,7 @@ const AuthModal = ({ isOpen, onClose }) => {
 
   if (!isOpen) return null;
 
-  console.log(isLogin);
+
 
   const handleSubmit = (e) => {
     e.preventDefault();

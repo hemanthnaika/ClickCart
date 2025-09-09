@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import Product from "./../models/product.model.js";
 import Category from "../models/category.model.js";
+import Review from "../models/review.model.js";
 
 // GET all products (only in-stock)
 export const products = async (req, res, next) => {
@@ -16,17 +17,20 @@ export const products = async (req, res, next) => {
   }
 };
 
-// GET single product by ID (optional: hide out of stock product)
 export const product = async (req, res, next) => {
   try {
-    const product = await Product.findById(req.params.id);
+    let product = await Product.findById(req.params.id);
 
     if (!product || product.stock === 0) {
       const error = new Error("Product not found or out of stock");
       error.statusCode = 404;
       throw error;
     }
-
+    const reviews = await Review.find({ product: product._id })
+      .populate("user", "name")
+      .sort({ createdAt: -1 });
+    product = product.toObject(); // convert mongoose doc to plain object
+    product.reviews = reviews;
     res.status(200).json({
       success: true,
       message: "Product fetched successfully",
@@ -198,6 +202,57 @@ export const searchProducts = async (req, res, next) => {
       message: "Products fetched successfully",
       data: products,
     });
+  } catch (error) {
+    next(error);
+  }
+};
+export const addReview = async (req, res, next) => {
+  try {
+    const { productId, rating, comment } = req.body.review;
+
+    // ✅ Get userId from req.user, not req.body
+    const userId = req.user._id;
+
+    const review = await Review.create({
+      product: productId,
+      user: userId,
+      rating,
+      comment,
+    });
+
+    const reviews = await Review.find({ product: productId });
+    const numReviews = reviews.length;
+    const avgRating =
+      reviews.reduce((acc, item) => item.rating + acc, 0) / numReviews;
+
+    await Product.findByIdAndUpdate(productId, {
+      numReviews,
+      averageRating: avgRating.toFixed(1),
+    });
+
+    res.status(201).json({ success: true, review });
+  } catch (error) {
+    if (error.code === 11000) {
+      return res
+        .status(400)
+        .json({ message: "You already reviewed this product" });
+    }
+    next(error);
+  }
+};
+
+export const getMyReview = async (req, res, next) => {
+  try {
+    const productId = req.params.id;
+    const userId = req.user._id; // from cookie auth
+
+    const review = await Review.findOne({ product: productId, user: userId });
+
+    if (!review) {
+      return res.status(200).json({ review: null });
+    }
+
+    res.status(200).json({ review });
   } catch (error) {
     next(error);
   }

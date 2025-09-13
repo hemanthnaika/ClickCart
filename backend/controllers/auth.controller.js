@@ -84,13 +84,12 @@ export const signIn = async (req, res, next) => {
       expiresIn: JWT_EXPIRES_IN,
     });
 
-    const isProduction = process.env.NODE_ENV === "production";
-
+    // Set JWT token in cookie
     res.cookie("token", token, {
       httpOnly: true,
-      secure: isProduction, // must be true in production (HTTPS)
-      sameSite: isProduction ? "none" : "lax", // lowercase, cross-site in prod
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      secure: process.env.NODE_ENV === NODE_ENV, // set to true in production (https)
+      sameSite: "none",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     const userResponse = user.toObject();
@@ -110,8 +109,8 @@ export const signOut = (req, res, next) => {
   try {
     res.clearCookie("token", {
       httpOnly: true,
+      secure: process.env.NODE_ENV === NODE_ENV, // set to true in production (https)
       sameSite: "none",
-      secure: process.env.NODE_ENV === NODE_ENV,
     });
     res.status(200).json({
       success: true,

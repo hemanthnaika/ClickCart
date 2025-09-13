@@ -1,18 +1,14 @@
-import React from "react";
-
 const Footer = () => {
   return (
-    <footer className="px-6  md:px-16 lg:px-36 w-full mt-10 ">
-      <div className="flex flex-col md:flex-row justify-between w-full gap-10 border-b border-gray-500 pb-10">
+    <footer className="px-6  md:px-16 lg:px-36 w-full mt-10 border-t border-gray-500/20 text-gray-700 bg-gray-50 ">
+      <div className="flex flex-col md:flex-row justify-between w-full gap-10 border-b border-gray-500 pb-10 py-6">
         <div className="md:max-w-96">
           <h1 className="font-bold text-3xl tracking-tight">
             <span className="text-blue-500">C</span>
             lickCart
           </h1>
           <p className="mt-6 text-sm">
-            Lorem Ipsum has been the industry's standard dummy text ever since
-            the 1500s, when an unknown printer took a galley of type and
-            scrambled it to make a type specimen book.
+            ClickCart – Your one-stop shop for seamless online shopping
           </p>
           <div className="flex items-center gap-2 mt-4">
             <img
@@ -32,16 +28,13 @@ const Footer = () => {
             <h2 className="font-semibold mb-5">Company</h2>
             <ul className="text-sm space-y-2">
               <li>
-                <a href="#">Home</a>
+                <a href="/">Home</a>
               </li>
               <li>
-                <a href="#">About us</a>
+                <a href="/about">About us</a>
               </li>
               <li>
-                <a href="#">Contact us</a>
-              </li>
-              <li>
-                <a href="#">Privacy policy</a>
+                <a href="/contact">Contact us</a>
               </li>
             </ul>
           </div>

@@ -1,5 +1,5 @@
 import Layout from "../Layout";
-import HeroCarousel from "../components/hero";
+
 import Cards from "../components/Cards";
 import CategoryGrid from "../components/CategoryCard";
 import NewsletterCard from "../components/NewsletterCard";
@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchProducts } from "../api/products";
 import CardSkeleton from "../components/CardSkeleton";
 import toast from "react-hot-toast";
+import HeroCarousel from './../components/Hero';
 
 const Home = () => {
   const { data, isLoading, isError, error } = useQuery({

@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { login, signUp } from "../api/auth";
 import { setUser } from "../features/authSlice";
 import toast from "react-hot-toast";
+import { UserIcon } from "lucide-react";
 
 const AuthModal = ({ isOpen, onClose }) => {
   const [isLogin, setIsLogin] = useState(true);
@@ -92,6 +93,7 @@ const AuthModal = ({ isOpen, onClose }) => {
           {/* Name field only in Register */}
           {!isLogin && (
             <div className="flex items-center w-full border border-gray-300 h-12 rounded-full pl-6 gap-2">
+              <UserIcon className="text-gray-500 w-4"/>
               <input
                 name="name"
                 type="text"
@@ -104,7 +106,7 @@ const AuthModal = ({ isOpen, onClose }) => {
 
           <div className="flex items-center w-full border border-gray-300 h-12 rounded-full pl-6 gap-2">
             <svg
-              width="13"
+              width="15"
               height="17"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"

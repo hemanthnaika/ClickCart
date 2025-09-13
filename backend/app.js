@@ -16,8 +16,8 @@ const app = express();
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://click-cart-inky.vercel.app/"],
-    credentials: true,
+    origin: ["http://localhost:5173", "https://click-cart-inky.vercel.app"],
+    credentials: true, // allows cookies or auth headers
   })
 );
 

@@ -84,11 +84,12 @@ export const signIn = async (req, res, next) => {
       expiresIn: JWT_EXPIRES_IN,
     });
 
-    // Set JWT token in cookie
+    const isProduction = process.env.NODE_ENV === "production";
+
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === NODE_ENV, // only true in production (HTTPS)
-      sameSite: "None",
+      secure: isProduction, // must be true in production (HTTPS)
+      sameSite: isProduction ? "none" : "lax", // lowercase, cross-site in prod
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 

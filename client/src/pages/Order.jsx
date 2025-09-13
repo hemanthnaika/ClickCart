@@ -3,10 +3,11 @@ import React from "react";
 import { useParams } from "react-router";
 import { fetchOrder } from "../api/order";
 import Layout from "../Layout";
-import OrderCard from "../components/orderCard";
+
 import { CheckCircle, Circle } from "lucide-react";
 import Invoice from "../components/Invoice";
 import ReviewForm from "./../components/ReviewForm";
+import OrderCard from "./../components/OrderCard";
 
 const Order = () => {
   const { id } = useParams();

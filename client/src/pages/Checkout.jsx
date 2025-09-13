@@ -3,11 +3,19 @@ import Layout from "../Layout";
 import CheckoutButton from "../components/Checkout";
 import { useSelector } from "react-redux";
 import ImageKit from "../components/ImgKit";
+import { useNavigate } from "react-router";
 
 const CheckoutPage = () => {
   const items = useSelector((state) => state.cart.items);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const user = useSelector((state) => state.auth.user?.user);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/", { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   const totalPrice = items.reduce(
     (acc, item) => acc + item.price * item.quantity,

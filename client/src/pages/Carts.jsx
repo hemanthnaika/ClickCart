@@ -1,17 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { removeFromCart, updateQuantity } from "../features/cartSlice";
 import ImageKit from "../components/ImgKit";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 const Carts = () => {
   const items = useSelector((state) => state.cart.items);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const handleQuantityChange = (id, quantity) => {
     dispatch(updateQuantity({ id, quantity: Number(quantity) }));
   };
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/", { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   const totalPrice = items.reduce(
     (acc, item) => acc + item.price * item.quantity,
@@ -115,7 +121,10 @@ const Carts = () => {
           </div>
         ))}
 
-        <Link className="group cursor-pointer flex items-center mt-8 gap-2 text-indigo-500 font-medium" to="/products">
+        <Link
+          className="group cursor-pointer flex items-center mt-8 gap-2 text-indigo-500 font-medium"
+          to="/products"
+        >
           <svg
             width="15"
             height="11"

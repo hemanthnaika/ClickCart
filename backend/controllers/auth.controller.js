@@ -83,12 +83,12 @@ export const signIn = async (req, res, next) => {
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, {
       expiresIn: JWT_EXPIRES_IN,
     });
-
+    const isProduction = process.env.NODE_ENV === "production";
     // Set JWT token in cookie
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === NODE_ENV, // only true in production (HTTPS)
-      sameSite: "strict",
+      secure: isProduction, // true in prod (HTTPS), false in dev
+      sameSite: isProduction ? "None" : "Lax", // cross-site only in prod
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 

@@ -87,8 +87,8 @@ export const signIn = async (req, res, next) => {
     // Set JWT token in cookie
     res.cookie("token", token, {
       httpOnly: true,
-      secure: isProduction, // true in prod (HTTPS), false in dev
-      sameSite: isProduction ? "None" : "Lax", // cross-site only in prod
+      secure: isProduction, // true only on HTTPS
+      sameSite: isProduction ? "none" : "lax", // lowercase "none" for cross-site cookies
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 

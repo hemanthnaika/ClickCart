@@ -44,7 +44,7 @@ export const signUp = async (req, res, next) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === NODE_ENV, // set to true in production (https)
-      sameSite: "strict",
+      sameSite: "none",
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
@@ -83,12 +83,12 @@ export const signIn = async (req, res, next) => {
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, {
       expiresIn: JWT_EXPIRES_IN,
     });
-    const isProduction = process.env.NODE_ENV === "production";
+
     // Set JWT token in cookie
     res.cookie("token", token, {
       httpOnly: true,
-      secure: isProduction, // true only on HTTPS
-      sameSite: isProduction ? "none" : "lax", // lowercase "none" for cross-site cookies
+      secure: process.env.NODE_ENV === NODE_ENV, // only true in production (HTTPS)
+      sameSite: "none",
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
@@ -109,7 +109,7 @@ export const signOut = (req, res, next) => {
   try {
     res.clearCookie("token", {
       httpOnly: true,
-      sameSite: "strict",
+      sameSite: "none",
       secure: process.env.NODE_ENV === NODE_ENV,
     });
     res.status(200).json({

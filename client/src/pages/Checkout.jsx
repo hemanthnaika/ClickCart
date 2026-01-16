@@ -228,7 +228,7 @@ const CheckoutPage = () => {
                     product: item._id,
                     quantity: item.quantity,
                   }))}
-                />
+                />  
               ) : (
                 <button
                   disabled
